@@ -1,6 +1,7 @@
+var url = window.location.href;
 // Functions
 let myAjax = function(url,type,data={},callback){
-    $.ajax({url : url,type : type,data : data,dataType : 'json',success : callback});
+    $.ajax({url : url,type : type,data : data,headers: {'Content-Type': 'application/x-www-form-urlencoded'},dataType : 'json',success : callback});
 }
 
 let showData = function(limit,page=0,cari = ''){
@@ -8,7 +9,7 @@ let showData = function(limit,page=0,cari = ''){
     page = page < 0? 0 : parseInt(page);
     let dataAjax = (cari !== '')?{'column': $("#cariData").data('field'),'cari':cari}:{};
     myAjax(
-        window.location.href.replace("#",'')+`backend/action.php?table=survei`,'post',dataAjax,
+        url.replace("#",'')+`backend/action.php?table=survei`,'post',dataAjax,
         function(result){
             let jmlPage = Math.ceil(result.length/limit);
             let teksHtml = '';
@@ -69,7 +70,7 @@ $(document).on('click', '#formButton, #ubahButton', function(){
     $("#formData input[type=text]:first").focus();
     if($(this).html() === 'Ubah'){
         myAjax(
-            window.location.href.replace("#",'')+`backend/action.php`,
+            url.replace("#",'')+`backend/action.php`,
             'get',
             {'table':'survei','id':$(this).data('id')},
             function(result){
@@ -85,7 +86,7 @@ $(document).on('click','#submitData', function(e){
     e.preventDefault();
     let dataSubmit = $(this).val().toLowerCase();
     myAjax(
-        window.location.href.replace("#",'')+`backend/action.php?table=survei`,
+        url.replace("#",'')+`backend/action.php?table=survei`,
         'post',
         $("#formData").serialize()+`&submit=${$(this).val().toLowerCase()}`,
         function(result){showBubble(dataSubmit, result > 0?"berhasil":"gagal", result > 0?"success":"danger");}
@@ -97,7 +98,7 @@ $(document).on('click','#hapusData',function(){
     if(confirm('Yakin ingin menghapus data?')){
         let dataSubmit = $(this).html().toLowerCase();
         myAjax(
-            window.location.href.replace("#",'')+`backend/action.php?table=survei`,
+            url.replace("#",'')+`backend/action.php?table=survei`,
             'post',
             {'submit':'hapus','id': $(this).data('id')},
             function(result){showBubble(dataSubmit, result > 0?"berhasil":"gagal", result > 0?"success":"danger");}
@@ -125,7 +126,6 @@ $(document).on('change','#limit',function(){
 $(document).on('click','.page-item',function(){
     if(!$(this).hasClass('disabled')){
         let page = $.isNumeric($(this).find(".page-link").text())?parseInt($(this).find(".page-link").text())-1:($(this).find(".page-link").attr('aria-label')==="Previous"?(parseInt($(".page-item.active .page-link").text())-2):(parseInt($(".page-item.active .page-link").text())));
-        console.log(page);
         showData($("#limit").val(),page);
     }
 });
