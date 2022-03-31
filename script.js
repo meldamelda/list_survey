@@ -1,4 +1,4 @@
-var url = window.location.href;
+var url = 'https://meldamelda.000webhostapp.com/';
 // Functions
 let myAjax = function(url,type,data={},callback){
     $.ajax({url : url,type : type,data : data,headers: {'Content-Type': 'application/x-www-form-urlencoded'},dataType : 'json',success : callback});
