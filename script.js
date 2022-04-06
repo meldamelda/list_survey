@@ -43,7 +43,7 @@ let showData = function(limit,page=0,cari = ''){
                 </li>`;
             $("#dataPagination").html(teksPagination);
             $("#awal").html((limit*page)+1);
-            $("#akhir").html((limit*page)+limit);
+            $("#akhir").html(((limit*page)+limit < result.length) ? (limit*page)+limit:result.length);
             $("#totalData").html(result.length);
         }
     );
